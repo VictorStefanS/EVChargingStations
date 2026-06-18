@@ -18,6 +18,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stops generating JSESSIONID
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/users").permitAll() // Allows POST requests
+                        .requestMatchers(HttpMethod.POST, "/stations").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
