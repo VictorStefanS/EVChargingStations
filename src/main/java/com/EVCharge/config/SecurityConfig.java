@@ -19,6 +19,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/users").permitAll() // Allows POST requests
                         .requestMatchers(HttpMethod.POST, "/stations").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/stations").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/stations/{id}/status").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
