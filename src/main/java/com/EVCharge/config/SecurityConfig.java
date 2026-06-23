@@ -17,10 +17,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())// Disables CSRF protection
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stops generating JSESSIONID
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll() // Allows POST requests
-                        .requestMatchers(HttpMethod.POST, "/stations").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/stations").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/stations/{id}/status").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/stations").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/stations/{id}/status").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
         return http.build();

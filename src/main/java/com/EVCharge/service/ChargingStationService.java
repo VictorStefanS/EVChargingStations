@@ -4,6 +4,7 @@ package com.EVCharge.service;
 import com.EVCharge.dto.ChargingStationDto;
 import com.EVCharge.model.ChargingStation;
 import com.EVCharge.model.StationStatus;
+import com.EVCharge.model.User;
 import com.EVCharge.repository.ChargingStationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ChargingStationService {
         return chargingStationRepository.findAll();
     }
 
-    public ChargingStation createStation(ChargingStationDto chargingStationDto) {
+    public ChargingStation createStation(ChargingStationDto chargingStationDto, User user) {
         if(chargingStationRepository.existsByLatitudeAndLongitude(chargingStationDto.getLatitude(), chargingStationDto.getLongitude())) {
             throw new RuntimeException("Station already exists");
         }
@@ -28,6 +29,7 @@ public class ChargingStationService {
         chargingStation.setName(chargingStationDto.getName());
         chargingStation.setLatitude(chargingStationDto.getLatitude());
         chargingStation.setLongitude(chargingStationDto.getLongitude());
+        chargingStation.setCreatedBy(user);
         chargingStation.setStatus(StationStatus.AVAILABLE);
         chargingStationRepository.save(chargingStation);
         return chargingStation;

@@ -22,4 +22,7 @@ public class ChargingStation {
 
     private Double latitude;
     private Double longitude;
+
+    @ManyToOne
+    private User createdBy;
 }

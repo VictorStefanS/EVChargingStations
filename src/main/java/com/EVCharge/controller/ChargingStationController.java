@@ -4,11 +4,13 @@ package com.EVCharge.controller;
 import com.EVCharge.dto.ChargingStationDto;
 import com.EVCharge.model.ChargingStation;
 import com.EVCharge.model.StationStatus;
+import com.EVCharge.model.User;
 import com.EVCharge.service.ChargingStationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class ChargingStationController {
 
 
     @PostMapping("/stations")
-    public ResponseEntity<ChargingStation> createStation(@RequestBody ChargingStationDto chargingStationDto) {
-        ChargingStation createdStation = chargingStationService.createStation(chargingStationDto);
+    public ResponseEntity<ChargingStation> createStation(@RequestBody ChargingStationDto chargingStationDto,@AuthenticationPrincipal User user) {
+        ChargingStation createdStation = chargingStationService.createStation(chargingStationDto, user);
         return new ResponseEntity<>(createdStation, HttpStatus.CREATED);
     }
 
