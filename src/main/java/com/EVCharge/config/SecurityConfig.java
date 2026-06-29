@@ -17,9 +17,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())// Disables CSRF protection
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stops generating JSESSIONID
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/stations/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/stations/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/stations").permitAll()
-
                         .requestMatchers(HttpMethod.POST, "/stations").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/stations/{id}/status").hasRole("ADMIN")
                         .anyRequest().authenticated()
