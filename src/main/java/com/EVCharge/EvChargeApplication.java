@@ -11,8 +11,4 @@ public class EvChargeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EvChargeApplication.class, args);
 	}
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 }
