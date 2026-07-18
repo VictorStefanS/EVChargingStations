@@ -2,9 +2,7 @@ package com.EVCharge.service;
 
 import com.EVCharge.dto.LoginRequestDto;
 import com.EVCharge.dto.LoginResponseDto;
-import com.EVCharge.model.User;
 import com.EVCharge.repository.UserRepository;
-import com.EVCharge.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

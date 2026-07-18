@@ -27,11 +27,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stops generating JSESSIONID
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/stations/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/stations/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/stations").permitAll()
                         .requestMatchers(HttpMethod.POST, "/stations").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/sessions/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/stations/{id}/status").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

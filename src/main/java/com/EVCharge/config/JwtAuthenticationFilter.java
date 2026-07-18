@@ -22,17 +22,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-         String authHeader = request.getHeader("Authorization");
-         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-             filterChain.doFilter(request, response);
-             return;
-         }
-         String jwt = authHeader.substring(7);
-         String userEmail = jwtService.extractEmail(jwt);
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        String jwt = authHeader.substring(7);
+        String userEmail = jwtService.extractEmail(jwt);
 
         if (userEmail != null && org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            if(jwtService.isTokenValid(jwt, userDetails)){
+            if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
