@@ -6,6 +6,7 @@ import com.EVCharge.model.ChargingStation;
 import com.EVCharge.model.StationStatus;
 import com.EVCharge.model.User;
 import com.EVCharge.service.ChargingStationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -27,7 +28,7 @@ public class ChargingStationController {
 
 
     @PostMapping("/stations")
-    public ResponseEntity<ChargingStation> createStation(@RequestBody ChargingStationDto chargingStationDto,@AuthenticationPrincipal User user) {
+    public ResponseEntity<ChargingStation> createStation(@Valid @RequestBody ChargingStationDto chargingStationDto,@AuthenticationPrincipal User user) {
         ChargingStation createdStation = chargingStationService.createStation(chargingStationDto, user);
         return new ResponseEntity<>(createdStation, HttpStatus.CREATED);
     }

@@ -7,8 +7,10 @@ import com.EVCharge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.EVCharge.model.UserRole;
 
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -24,6 +26,7 @@ public class UserService {
          user.setEmail(registrationDto.getEmail());
          String cryptedPassword = passwordEncoder.encode(registrationDto.getPassword());
          user.setPassword(cryptedPassword);
+         user.setRole(UserRole.ROLE_USER);
          userRepository.save(user);
          return user;
     }

@@ -25,4 +25,7 @@ public class ChargingStation {
 
     @ManyToOne
     private User createdBy;
+
+    @Version
+    private Long version;
 }

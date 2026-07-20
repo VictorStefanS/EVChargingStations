@@ -26,14 +26,14 @@ public class ChargingSessionService {
 
         chargingSessionRepository.findByUserIdAndStatus(user.getId(), SessionStatus.ACTIVE)
                 .ifPresent(s -> {
-                    throw new RuntimeException("Session already active");
+                    throw new RuntimeException("User already has an active charging session. Please stop your current session before starting a new one.");
                 });
 
         ChargingStation station = chargingStationRepository.findById(stationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Station not found"));
 
-        if(!"AVAILABLE".equals(station.getStatus().toString())) {
-            throw new RuntimeException("Session already active");
+        if (station.getStatus() != StationStatus.AVAILABLE) {
+            throw new RuntimeException("Charging station is not available (current status: " + station.getStatus() + ")");
         }
         station.setStatus(StationStatus.OCCUPIED);
         chargingStationRepository.save(station);
