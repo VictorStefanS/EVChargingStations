@@ -1,6 +1,6 @@
 package com.EVCharge.config;
 
-
+import com.EVCharge.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,15 +11,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.EVCharge.security.JwtAuthenticationEntryPoint;
 
-@Configuration @EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final  JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,21 +29,30 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stops generating JSESSIONID
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/stations/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/stations/**").hasRole("ADMIN")
+
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/auth/**",
+                                "/error"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/stations").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/stations").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/sessions/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/stations/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/stations/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/stations/{id}/status").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/sessions/**").authenticated()
+
+
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
