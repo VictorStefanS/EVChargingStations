@@ -1,4 +1,4 @@
-package com.EVCharge.dto;
+package com.EVCharge.backend.dto;
 
 
 import jakarta.validation.constraints.*;

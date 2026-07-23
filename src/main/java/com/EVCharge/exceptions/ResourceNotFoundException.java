@@ -1,4 +1,4 @@
-package com.EVCharge.exceptions;
+package com.EVCharge.backend.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
     public String getMessage(){

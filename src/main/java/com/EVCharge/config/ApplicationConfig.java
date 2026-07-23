@@ -1,7 +1,7 @@
-package com.EVCharge.config;
+package com.EVCharge.backend;
 
 
-import com.EVCharge.repository.UserRepository;
+import com.EVCharge.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

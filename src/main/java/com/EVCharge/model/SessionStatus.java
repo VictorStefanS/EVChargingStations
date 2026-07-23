@@ -1,4 +1,4 @@
-package com.EVCharge.model;
+package com.EVCharge.backend.model;
 
 public enum SessionStatus {
     ACTIVE,

@@ -1,6 +1,6 @@
-package com.EVCharge.repository;
+package com.EVCharge.backend.repository;
 
-import com.EVCharge.model.ChargingStation;
+import com.EVCharge.backend.model.ChargingStation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

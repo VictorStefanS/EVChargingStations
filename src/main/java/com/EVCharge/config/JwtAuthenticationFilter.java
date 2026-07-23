@@ -1,6 +1,6 @@
-package com.EVCharge.config;
+package com.EVCharge.backend;
 
-import com.EVCharge.service.JwtService;
+import com.EVCharge.backend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import io.jsonwebtoken.JwtException;

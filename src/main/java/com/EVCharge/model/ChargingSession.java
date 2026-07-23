@@ -1,9 +1,7 @@
-package com.EVCharge.model;
+package com.EVCharge.backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import javax.xml.stream.FactoryConfigurationError;
 import java.time.LocalDateTime;
 
 @Entity

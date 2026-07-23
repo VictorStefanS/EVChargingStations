@@ -1,9 +1,9 @@
-package com.EVCharge.controller;
+package com.EVCharge.backend.controller;
 
 
-import com.EVCharge.dto.UserRegistrationDto;
-import com.EVCharge.model.User;
-import com.EVCharge.service.UserService;
+import com.EVCharge.backend.dto.UserRegistrationDto;
+import com.EVCharge.backend.model.User;
+import com.EVCharge.backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

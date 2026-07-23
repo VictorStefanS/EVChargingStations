@@ -1,15 +1,14 @@
-package com.EVCharge.controller;
+package com.EVCharge.backend.controller;
 
 
-import com.EVCharge.dto.ChargingStationDto;
-import com.EVCharge.model.ChargingStation;
-import com.EVCharge.model.StationStatus;
-import com.EVCharge.model.User;
-import com.EVCharge.service.ChargingStationService;
+import com.EVCharge.backend.dto.ChargingStationDto;
+import com.EVCharge.backend.model.ChargingStation;
+import com.EVCharge.backend.model.StationStatus;
+import com.EVCharge.backend.model.User;
+import com.EVCharge.backend.service.ChargingStationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

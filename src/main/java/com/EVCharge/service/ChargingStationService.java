@@ -1,11 +1,11 @@
-package com.EVCharge.service;
+package com.EVCharge.backend.service;
 
 
-import com.EVCharge.dto.ChargingStationDto;
-import com.EVCharge.model.ChargingStation;
-import com.EVCharge.model.StationStatus;
-import com.EVCharge.model.User;
-import com.EVCharge.repository.ChargingStationRepository;
+import com.EVCharge.backend.dto.ChargingStationDto;
+import com.EVCharge.backend.model.ChargingStation;
+import com.EVCharge.backend.model.StationStatus;
+import com.EVCharge.backend.model.User;
+import com.EVCharge.backend.repository.ChargingStationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

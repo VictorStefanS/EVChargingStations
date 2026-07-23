@@ -1,6 +1,6 @@
-package com.EVCharge.dto;
+package com.EVCharge.backend.dto;
 
-import com.EVCharge.model.SessionStatus;
+import com.EVCharge.backend.model.SessionStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;

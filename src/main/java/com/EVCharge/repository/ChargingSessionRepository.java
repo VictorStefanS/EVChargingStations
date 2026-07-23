@@ -1,7 +1,7 @@
-package com.EVCharge.repository;
+package com.EVCharge.backend.repository;
 
-import com.EVCharge.model.ChargingSession;
-import com.EVCharge.model.SessionStatus;
+import com.EVCharge.backend.model.ChargingSession;
+import com.EVCharge.backend.model.SessionStatus;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
