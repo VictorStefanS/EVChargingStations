@@ -1,9 +1,9 @@
-package com.EVCharge.backend.controller;
+package com.EVCharge.controller;
 
 
-import com.EVCharge.backend.dto.LoginRequestDto;
-import com.EVCharge.backend.dto.LoginResponseDto;
-import com.EVCharge.backend.service.AuthenticationService;
+import com.EVCharge.dto.LoginRequestDto;
+import com.EVCharge.dto.LoginResponseDto;
+import com.EVCharge.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

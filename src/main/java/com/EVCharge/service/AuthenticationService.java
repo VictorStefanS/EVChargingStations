@@ -1,13 +1,14 @@
-package com.EVCharge.backend.service;
+package com.EVCharge.service;
 
-import com.EVCharge.backend.dto.LoginRequestDto;
-import com.EVCharge.backend.dto.LoginResponseDto;
-import com.EVCharge.backend.repository.UserRepository;
+import com.EVCharge.dto.LoginRequestDto;
+import com.EVCharge.dto.LoginResponseDto;
+import com.EVCharge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 

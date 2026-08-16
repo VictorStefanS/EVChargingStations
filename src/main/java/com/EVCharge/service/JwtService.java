@@ -1,6 +1,6 @@
-package com.EVCharge.backend.service;
+package com.EVCharge.service;
 
-import com.EVCharge.backend.model.User;
+import com.EVCharge.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

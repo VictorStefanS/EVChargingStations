@@ -1,4 +1,4 @@
-package com.EVCharge.backend.dto;
+package com.EVCharge.dto;
 
 
 import lombok.AllArgsConstructor;

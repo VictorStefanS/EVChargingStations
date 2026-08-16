@@ -1,4 +1,4 @@
-package com.EVCharge.backend;
+package com.EVCharge.config;
 
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;

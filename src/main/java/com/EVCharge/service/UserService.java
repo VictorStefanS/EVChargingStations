@@ -1,13 +1,13 @@
-package com.EVCharge.backend.service;
+package com.EVCharge.service;
 
 
-import com.EVCharge.backend.dto.UserRegistrationDto;
-import com.EVCharge.backend.model.User;
-import com.EVCharge.backend.repository.UserRepository;
+import com.EVCharge.dto.UserRegistrationDto;
+import com.EVCharge.model.User;
+import com.EVCharge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.EVCharge.backend.model.UserRole;
+import com.EVCharge.model.UserRole;
 
 @Service
 @RequiredArgsConstructor

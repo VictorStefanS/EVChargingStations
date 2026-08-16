@@ -1,11 +1,10 @@
-package com.EVCharge.backend.service;
+package com.EVCharge.service;
 
-import com.EVCharge.backend.exceptions.ResourceNotFoundException;
-import com.EVCharge.backend.config.model.*;
-import com.EVCharge.backend.model.*;
-import com.EVCharge.backend.repository.ChargingSessionRepository;
-import com.EVCharge.backend.repository.ChargingStationRepository;
-import com.EVCharge.backend.repository.UserRepository;
+import com.EVCharge.exceptions.ResourceNotFoundException;
+import com.EVCharge.model.*;
+import com.EVCharge.repository.ChargingSessionRepository;
+import com.EVCharge.repository.ChargingStationRepository;
+import com.EVCharge.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

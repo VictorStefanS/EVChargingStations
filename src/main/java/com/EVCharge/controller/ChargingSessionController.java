@@ -1,8 +1,8 @@
-package com.EVCharge.backend.controller;
+package com.EVCharge.controller;
 
-import com.EVCharge.backend.dto.ChargingSessionDto;
-import com.EVCharge.backend.model.ChargingSession;
-import com.EVCharge.backend.service.ChargingSessionService;
+import com.EVCharge.dto.ChargingSessionDto;
+import com.EVCharge.model.ChargingSession;
+import com.EVCharge.service.ChargingSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

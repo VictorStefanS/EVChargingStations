@@ -1,4 +1,4 @@
-package com.EVCharge.backend.model;
+package com.EVCharge.model;
 
 public enum StationStatus {
     AVAILABLE,
