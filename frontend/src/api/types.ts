@@ -140,9 +140,9 @@ export interface components {
             /** @enum {string} */
             role?: "ROLE_ADMIN" | "ROLE_USER";
             enabled?: boolean;
-            accountNonLocked?: boolean;
             authorities?: components["schemas"]["GrantedAuthority"][];
             username?: string;
+            accountNonLocked?: boolean;
             credentialsNonExpired?: boolean;
             accountNonExpired?: boolean;
         };

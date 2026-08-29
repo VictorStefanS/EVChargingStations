@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { api } from "../api/client";
+import { useAuth } from "../auth/AuthProvider";
 
 interface LoginFormProps {
-  onLoginSuccess: () => void;
+  onLoginSuccess?: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
@@ -10,6 +10,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const auth = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,26 +18,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      // 1. Call backend /auth/login endpoint using our openapi-fetch client
-      const { data, error: apiError } = await api.POST("/auth/login", {
-        body: {
-          email: email,
-          password: password,
-        },
-      });
-
-      if (apiError) {
-        setError("Invalid credentials or server error.");
-        return;
-      }
-
-      // 2. Extract JWT token from backend response and store it
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-        onLoginSuccess();
-      }
+      await auth.login({ email, password });
+      onLoginSuccess?.();
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      setError("Invalid credentials or server error.");
     } finally {
       setLoading(false);
     }
