@@ -34,12 +34,21 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        var token = jwtService.generateToken(user);
-
+        var accessToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
 
         return LoginResponseDto.builder()
-                .token(token)
+                .token(accessToken)
+                .refreshToken(refreshToken)
                 .build();
+    }
+
+    public LoginResponseDto refresh(String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        var accessToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        return LoginResponseDto.builder().token(accessToken).refreshToken(refreshToken).build();
     }
 
 }

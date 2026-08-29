@@ -26,10 +26,36 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("role", roleName)
+                .claim("type", "access")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // <--- Schimbat aici
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 10))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    // Generate a refresh token (HttpOnly cookie). Longer expiry and marked as type=refresh
+    public String generateRefreshToken(User user) {
+        String roleName = (user.getRole() != null) ? user.getRole().name() : "USER";
+        // e.g., 7 days
+        long refreshExpiryMs = 1000L * 60 * 60 * 24 * 7;
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .claim("role", roleName)
+                .claim("type", "refresh")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiryMs))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public boolean isRefreshToken(String token) {
+        try {
+            var claims = Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+            Object typ = claims.get("type");
+            return typ != null && "refresh".equals(typ.toString());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String extractEmail(String token) {
