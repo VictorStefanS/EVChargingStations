@@ -47,9 +47,8 @@ public class AuthenticationController {
         if (!jwtService.isRefreshToken(refreshToken)) {
             throw new RuntimeException("Invalid refresh token");
         }
-        String email = jwtService.extractEmail(refreshToken);
-        // validate and rotate
-        var resp = authenticationService.refresh(email);
+        // validate and rotate using stored tokens
+        var resp = authenticationService.refreshWithToken(refreshToken);
         if (resp.getRefreshToken() != null) {
             ResponseCookie cookie = ResponseCookie.from("refreshToken", resp.getRefreshToken())
                     .httpOnly(true)
@@ -61,6 +60,22 @@ public class AuthenticationController {
             response.addHeader("Set-Cookie", cookie.toString());
         }
         return LoginResponseDto.builder().token(resp.getToken()).build();
+    }
+
+    @PostMapping("/logout")
+    public void logout(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+        // revoke server-side token and clear cookie
+        if (refreshToken != null && !refreshToken.isEmpty()) {
+            authenticationService.revokeRefreshToken(refreshToken);
+        }
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 }
 
