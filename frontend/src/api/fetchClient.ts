@@ -1,5 +1,6 @@
 import type { components } from './types';
 import { getAuthToken } from '../auth/tokenStore';
+import { logError } from '../lib/notifications';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
 
@@ -20,7 +21,9 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Request failed ${res.status}: ${text}`);
+    const message = `Request failed ${res.status}: ${text}`;
+    logError(`API ${path}`, new Error(message));
+    throw new Error(message);
   }
 
   const contentType = res.headers.get('content-type') ?? '';

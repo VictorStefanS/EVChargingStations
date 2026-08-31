@@ -1,5 +1,6 @@
 ﻿import React, { createContext, useContext, useEffect, useState } from 'react';
 import { login as apiLogin } from '../api/fetchClient';
+import { notify, logError } from '../lib/notifications';
 import { setAuthToken } from './tokenStore';
 
 type AuthContextType = {
@@ -48,7 +49,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (e) {
       // on refresh failure, log out
-      console.error('[Auth] Silent refresh failed', e);
+      logError('Auth refresh', e);
+      notify('Your session expired. Please log in again.', 'error');
       setToken(null);
     }
   }
@@ -92,15 +94,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [token]);
 
   const login = async (credentials: { email: string; password: string }) => {
-    const resp = await apiLogin(credentials);
-    if (resp?.token) {
-      setToken(resp.token);
-    } else {
-      throw new Error('Login failed');
+    try {
+      const resp = await apiLogin(credentials);
+      if (resp?.token) {
+        setToken(resp.token);
+        notify('Logged in successfully.', 'success');
+      } else {
+        throw new Error('Login failed');
+      }
+    } catch (error) {
+      logError('Auth login', error);
+      throw error;
     }
   };
 
-  const logout = () => setToken(null);
+  const logout = () => {
+    setToken(null);
+    notify('You have been logged out.', 'info');
+  };
 
   const value: AuthContextType = {
     token,
