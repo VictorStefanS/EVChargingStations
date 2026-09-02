@@ -9,4 +9,9 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   reporter: [['list']],
+  webServer: {
+    command: 'npx http-server ./dist -p 5173 -c-1',
+    port: 5173,
+    reuseExistingServer: false,
+  },
 });
