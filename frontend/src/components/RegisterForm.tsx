@@ -52,6 +52,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onRegistered }) => {
       return;
     }
 
+    // bcrypt limitation: prevent sending passwords longer than 72 bytes
+    const passBytes = new TextEncoder().encode(password).length;
+    if (passBytes > 72) {
+      setError('Password too long — must be 72 bytes or fewer. Try shortening or removing non-ASCII characters.');
+      return;
+    }
+
     setLoading(true);
 
     try {

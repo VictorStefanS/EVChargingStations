@@ -10,7 +10,7 @@ export default defineConfig({
   },
   reporter: [['list']],
   webServer: {
-    command: 'npx http-server ./dist -p 5173 -c-1',
+    command: 'node ./node_modules/serve/build/main.js ./dist --single --listen 5173',
     port: 5173,
     reuseExistingServer: false,
   },

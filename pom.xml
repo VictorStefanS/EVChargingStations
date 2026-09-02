@@ -95,6 +95,13 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+        
+		<!-- BouncyCastle for Argon2 support used by Argon2PasswordEncoder -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.70</version>
+		</dependency>
 	</dependencies>
 
 	<build>

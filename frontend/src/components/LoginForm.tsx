@@ -15,13 +15,22 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // bcrypt limitation: 72 bytes max — validate and show clear message
+    const passBytes = new TextEncoder().encode(password).length;
+    if (passBytes > 72) {
+      setError('Password too long — must be 72 bytes or fewer. Try shortening or removing non-ASCII characters.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       await auth.login({ email, password });
       onLoginSuccess?.();
-    } catch (err) {
-      setError("Invalid credentials or server error.");
+    } catch (err: any) {
+      // surface server error message when available
+      setError(err?.message ?? 'Invalid credentials or server error.');
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,4 @@
-import type { components } from './types';
+﻿import type { components } from './types';
 import { getAuthToken } from '../auth/tokenStore';
 import { logError } from '../lib/notifications';
 
@@ -21,7 +21,17 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
 
   if (!res.ok) {
     const text = await res.text();
-    const message = `Request failed ${res.status}: ${text}`;
+    // try to parse server JSON error body and surface its message
+    let msg = `Request failed ${res.status}`;
+    try {
+      const json = JSON.parse(text);
+      if (json && json.message) msg = json.message;
+      else if (json && json.error) msg = json.error;
+      else msg = text;
+    } catch {
+      msg = text || msg;
+    }
+    const message = `${msg}`;
     logError(`API ${path}`, new Error(message));
     throw new Error(message);
   }

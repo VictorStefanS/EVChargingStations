@@ -5,7 +5,7 @@ import com.EVCharge.dto.UserRegistrationDto;
 import com.EVCharge.model.User;
 import com.EVCharge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.EVCharge.model.UserRole;
 
@@ -14,7 +14,7 @@ import com.EVCharge.model.UserRole;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public User registerUser(UserRegistrationDto registrationDto) {
         if (userRepository.existsByEmail(registrationDto.getEmail())) {

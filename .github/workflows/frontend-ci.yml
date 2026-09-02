@@ -29,15 +29,6 @@ jobs:
       - name: Run unit tests (Vitest)
         run: npm test
 
-      - name: Run unit tests with coverage
-        run: npm run test:coverage
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage
-          path: coverage
-
       - name: Build frontend
         run: npm run build
 
