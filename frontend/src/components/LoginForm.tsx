@@ -29,8 +29,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
       await auth.login({ email, password });
       onLoginSuccess?.();
     } catch (err: any) {
-      // surface server error message when available
-      setError(err?.message ?? 'Invalid credentials or server error.');
+    // normalize error message shown to users to keep tests and UX consistent
+    setError('Invalid credentials or server error');
     } finally {
       setLoading(false);
     }

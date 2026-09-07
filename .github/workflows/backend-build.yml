@@ -1,0 +1,54 @@
+name: Backend Build (includes frontend static copy)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Node.js (for frontend build)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Compress frontend assets
+        working-directory: frontend
+        run: npm run compress:dist
+
+      - name: Copy frontend dist into backend resources
+        run: |
+          if (Test-Path -Path './src/main/resources/static') { Remove-Item -Recurse -Force './src/main/resources/static' }
+          New-Item -ItemType Directory -Force -Path './src/main/resources/static' | Out-Null
+          Copy-Item -Path './frontend/dist/*' -Destination './src/main/resources/static' -Recurse -Force
+
+      - name: Build backend (Maven package)
+        run: mvn -B -DskipTests package
+
+      - name: Upload backend jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: target/*.jar
