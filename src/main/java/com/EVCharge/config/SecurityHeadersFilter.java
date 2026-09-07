@@ -25,7 +25,7 @@ public class SecurityHeadersFilter extends HttpFilter {
         response.setHeader("Cross-Origin-Opener-Policy", "same-origin");
         response.setHeader("Cross-Origin-Resource-Policy", "same-origin");
 
-        // Content-Security-Policy: tighten to only allow OpenStreetMap tiles and self for scripts/styles/fonts
+        // Content-Security-Policy: tighten to only allow OpenStreetMap tiles and self for sts/styles/fonts
         String csp = "default-src 'self'; " +
                 "img-src 'self' data: https://tile.openstreetmap.org https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org; " +
                 "script-src 'self' 'unsafe-inline'; " +
