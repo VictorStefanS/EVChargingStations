@@ -1,11 +1,12 @@
 import React from 'react'
-import { MapContainer as RLMapContainer, TileLayer as RLTileLayer, CircleMarker as RLCircleMarker, Popup as RLPopup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useQuery } from '@tanstack/react-query'
 import { getStationsNearby } from '../api/fetchClient'
 
 // use loose typing for API result to avoid strict leaflet/react-leaflet type mismatches
 type StationLike = any
+
+const StationsMapLeaflet = React.lazy(() => import('./StationsMapLeaflet'))
 
 export const StationsMap: React.FC<{
   position: [number, number] | null
@@ -36,37 +37,24 @@ export const StationsMap: React.FC<{
     return R * c
   }
 
-  // annotate stations with distance and sort
-  const stationsWithDistance = (stations || []).map((s: StationLike) => {
-    const lat = s.latitude ?? s.lat
-    const lng = s.longitude ?? s.lng
-    const dist = position ? distanceKm(position[0], position[1], lat, lng) : undefined
-    return { ...s, _distanceKm: dist }
-  }).sort((a: any, b: any) => (a._distanceKm ?? 0) - (b._distanceKm ?? 0))
+  // validate position coordinates (Leaflet requires finite numbers)
+  const validPosition = !!position && Number.isFinite(position[0]) && Number.isFinite(position[1])
 
+  // annotate stations with distance and sort; skip stations with invalid coords
+  const stationsWithDistance = (stations || [])
+    .map((s: StationLike) => {
+      const lat = s.latitude ?? s.lat
+      const lng = s.longitude ?? s.lng
+      const hasCoords = Number.isFinite(lat) && Number.isFinite(lng)
+      const dist = validPosition && hasCoords ? distanceKm(position![0], position![1], lat, lng) : undefined
+      return hasCoords ? { ...s, _distanceKm: dist } : null
+    })
+    .filter((s: any) => s != null)
+    .sort((a: any, b: any) => (a._distanceKm ?? 0) - (b._distanceKm ?? 0))
 
-  if (!position) return <div>Obtaining location&hellip;</div>
+  if (!validPosition) return <div>Unable to determine location&hellip;</div>
   if (isLoading) return <div>Loading stations&hellip;</div>
   if (error) return <div>Error loading stations</div>
-
-  const statusColor = (status: string) => {
-    switch (status) {
-      case 'AVAILABLE':
-        return 'green'
-      case 'OCCUPIED':
-        return 'red'
-      case 'MAINTENANCE':
-        return 'orange'
-      default:
-        return 'blue'
-    }
-  }
-
-  // cast react-leaflet components to any to avoid prop-type mismatches in this environment
-  const MapContainer: any = RLMapContainer as any
-  const TileLayer: any = RLTileLayer as any
-  const CircleMarker: any = RLCircleMarker as any
-  const Popup: any = RLPopup as any
 
   return (
     <div style={{ height: '70vh', width: '100%' }}>
@@ -76,38 +64,17 @@ export const StationsMap: React.FC<{
         <div style={{ marginLeft: 'auto' }}>{(stationsWithDistance || []).length} stations</div>
       </div>
 
-      <MapContainer center={position as any} zoom={13} style={{ height: 'calc(70vh - 40px)', width: '100%' }}>
-        <TileLayer
-          attribution={'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}
-          url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
+      <React.Suspense fallback={<div>Loading map…</div>}>
+        <StationsMapLeaflet
+          position={position as [number, number]}
+          stations={stationsWithDistance as any}
+          selectedStationId={selectedStationId}
+          onSelectStation={(id) => { onSelectStation(id); if (id) {
+            const s = (stationsWithDistance as any).find((x: any) => x.id === id)
+            if (s) setPosition([s.latitude ?? s.lat, s.longitude ?? s.lng])
+          } }}
         />
-
-        {/* user position */}
-        <CircleMarker center={position as any} radius={8} pathOptions={{ color: 'blue' }}>
-          <Popup>Your location</Popup>
-        </CircleMarker>
-
-        {(stationsWithDistance || []).map((s: any, idx: number) => (
-          <CircleMarker
-            key={s.id ?? idx}
-            center={[s.latitude ?? s.lat, s.longitude ?? s.lng]}
-            radius={selectedStationId === s.id ? 12 : 8}
-            pathOptions={{ color: statusColor(s.status ?? s.stationStatus ?? 'UNKNOWN') }}
-            eventHandlers={{ click: () => { onSelectStation?.(s.id); setPosition?.([s.latitude ?? s.lat, s.longitude ?? s.lng]); } }}
-          >
-            <Popup>
-              <div>
-                <strong>{s.name}</strong>
-                <div>Status: {s.status}</div>
-                <div>Distance: {s._distanceKm !== undefined ? `${s._distanceKm.toFixed(2)} km` : '—'}</div>
-                <div>
-                  <a href={`https://www.google.com/maps/search/?api=1&query=${s.latitude ?? s.lat},${s.longitude ?? s.lng}`} target="_blank" rel="noreferrer">Open in Maps</a>
-                </div>
-              </div>
-            </Popup>
-          </CircleMarker>
-        ))}
-      </MapContainer>
+      </React.Suspense>
     </div>
   )
 }
