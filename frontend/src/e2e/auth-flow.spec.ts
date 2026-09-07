@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { writeFileSync } from 'fs';
 
 test('user can login, access protected page, and logout', async ({ page }) => {
   await page.route('**/auth/login', async (route) => {
@@ -37,8 +38,7 @@ test('user can login, access protected page, and logout', async ({ page }) => {
     // capture debug artifacts to help diagnose CI/local failures
     await page.screenshot({ path: 'playwright-failure.png', fullPage: true });
     const html = await page.content();
-    const fs = require('fs');
-    fs.writeFileSync('playwright-failure.html', html);
+    writeFileSync('playwright-failure.html', html);
     throw err;
   }
 
