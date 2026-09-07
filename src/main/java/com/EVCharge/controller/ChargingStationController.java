@@ -23,7 +23,19 @@ public class ChargingStationController {
 
     @GetMapping("/stations")
     public ResponseEntity<List<ChargingStation>> getAllChargingStations() {
-        return new ResponseEntity<>(chargingStationService.getAllStations(), HttpStatus.OK);
+        var list = chargingStationService.getAllStations();
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(java.time.Duration.ofSeconds(60)))
+                .body(list);
+    }
+
+    @GetMapping("/stations/nearby")
+    public ResponseEntity<List<ChargingStation>> getNearbyStations(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "5") double radiusKm) {
+        // default radius = 5 km
+        var list = chargingStationService.getNearbyStations(lat, lng, radiusKm);
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(java.time.Duration.ofSeconds(60)))
+                .body(list);
     }
 
 

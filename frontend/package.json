@@ -12,16 +12,20 @@
     "test:e2e": "playwright test",
     "e2e": "playwright test",
     "preview": "vite preview",
-    "generate-api": "openapi-typescript http://localhost:8080/v3/api-docs -o src/api/types.ts"
+    "generate-api": "openapi-typescript http://localhost:8080/v3/api-docs -o src/api/types.ts",
+    "compress:dist": "node ./scripts/compress-dist.js"
   },
   "dependencies": {
     "@sentry/react": "^10.11.0",
     "@tanstack/react-query": "^4.44.0",
+    "leaflet": "^1.9.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.30.6"
   },
   "devDependencies": {
+    
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
     "@rolldown/binding-win32-x64-msvc": "^1.2.0",

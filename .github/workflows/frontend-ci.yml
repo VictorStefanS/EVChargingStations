@@ -32,6 +32,15 @@ jobs:
       - name: Build frontend
         run: npm run build
 
+      - name: Compress built assets (gzip + brotli)
+        run: npm run compress:dist
+
+      - name: Upload compressed dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 

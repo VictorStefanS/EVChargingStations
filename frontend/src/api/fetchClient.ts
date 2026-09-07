@@ -73,6 +73,11 @@ export async function getStations(): Promise<ChargingStation[]> {
   return apiFetch<ChargingStation[]>('/stations', { method: 'GET' });
 }
 
+export async function getStationsNearby(lat: number, lng: number, radiusKm = 5): Promise<ChargingStation[]> {
+  const params = new URLSearchParams({ lat: String(lat), lng: String(lng), radiusKm: String(radiusKm) });
+  return apiFetch<ChargingStation[]>(`/stations/nearby?${params.toString()}`, { method: 'GET' });
+}
+
 export async function createStation(payload: ChargingStationDto): Promise<ChargingStation> {
   return apiFetch<ChargingStation>('/stations', {
     method: 'POST',

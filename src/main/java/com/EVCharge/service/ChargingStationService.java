@@ -21,6 +21,11 @@ public class ChargingStationService {
         return chargingStationRepository.findAll();
     }
 
+    public List<ChargingStation> getNearbyStations(double latitude, double longitude, double radiusKm) {
+        // radiusKm: distance in kilometers
+        return chargingStationRepository.findNearby(latitude, longitude, radiusKm);
+    }
+
     public ChargingStation createStation(ChargingStationDto chargingStationDto, User user) {
         if(chargingStationRepository.existsByLatitudeAndLongitude(chargingStationDto.getLatitude(), chargingStationDto.getLongitude())) {
             throw new RuntimeException("Station already exists");
