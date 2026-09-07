@@ -13,7 +13,7 @@
     "e2e": "playwright test",
     "preview": "vite preview",
     "generate-api": "openapi-typescript http://localhost:8080/v3/api-docs -o src/api/types.ts",
-    "compress:dist": "node ./scripts/compress-dist.js"
+    "compress:dist": "node ./scripts/compress-dist.cjs"
   },
   "dependencies": {
     "@sentry/react": "^10.11.0",
