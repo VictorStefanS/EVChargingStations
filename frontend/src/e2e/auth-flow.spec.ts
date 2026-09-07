@@ -12,7 +12,8 @@ test('user can login, access protected page, and logout', async ({ page }) => {
     });
   });
 
-  await page.route('**/stations', async (route) => {
+  // intercept any stations endpoint (e.g. /stations or /stations/nearby)
+  await page.route('**/stations*', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -30,7 +31,16 @@ test('user can login, access protected page, and logout', async ({ page }) => {
 
   await expect(page).toHaveURL(/\/app$/);
   await expect(page.getByText(/welcome back/i)).toBeVisible();
-  await expect(page.getByText(/station 1/i)).toBeVisible();
+  try {
+    await expect(page.getByText(/station 1/i)).toBeVisible({ timeout: 10000 });
+  } catch (err) {
+    // capture debug artifacts to help diagnose CI/local failures
+    await page.screenshot({ path: 'playwright-failure.png', fullPage: true });
+    const html = await page.content();
+    const fs = require('fs');
+    fs.writeFileSync('playwright-failure.html', html);
+    throw err;
+  }
 
   await page.getByRole('button', { name: /logout/i }).click();
   await expect(page).toHaveURL(/\/login$/);
