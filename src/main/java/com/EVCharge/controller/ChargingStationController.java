@@ -38,6 +38,14 @@ public class ChargingStationController {
                 .body(list);
     }
 
+    @GetMapping("/stations/nearby-with-distance")
+    public ResponseEntity<java.util.List<com.EVCharge.dto.ChargingStationWithDistanceDto>> getNearbyStationsWithDistance(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "5") double radiusKm) {
+        var list = chargingStationService.getNearbyStationsWithDistance(lat, lng, radiusKm);
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(java.time.Duration.ofSeconds(60)))
+                .body(list);
+    }
+
 
     @PostMapping("/stations")
     public ResponseEntity<ChargingStation> createStation(@Valid @RequestBody ChargingStationDto chargingStationDto,@AuthenticationPrincipal User user) {

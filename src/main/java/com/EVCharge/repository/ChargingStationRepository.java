@@ -14,4 +14,11 @@ public interface ChargingStationRepository extends JpaRepository<ChargingStation
     // native query to find stations within radius (km) using Haversine formula
     @Query(value = "SELECT * FROM Charging_Stations s WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(s.latitude)) * cos(radians(s.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(s.latitude)))) <= :radius ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(s.latitude)) * cos(radians(s.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(s.latitude))))", nativeQuery = true)
     List<ChargingStation> findNearby(@Param("lat") double lat, @Param("lng") double lng, @Param("radius") double radius);
+
+    // returns selected columns plus computed distance (km)
+    @Query(value = "SELECT s.id, s.name, s.latitude, s.longitude, (6371 * acos(cos(radians(:lat)) * cos(radians(s.latitude)) * cos(radians(s.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(s.latitude)))) AS distance " +
+            "FROM Charging_Stations s " +
+            "WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(s.latitude)) * cos(radians(s.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(s.latitude)))) <= :radius " +
+            "ORDER BY distance", nativeQuery = true)
+    List<Object[]> findNearbyWithDistance(@Param("lat") double lat, @Param("lng") double lng, @Param("radius") double radius);
 }
